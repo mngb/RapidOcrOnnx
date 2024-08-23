@@ -2,10 +2,7 @@
 
 ### 联系方式
 
-- QQ1群：~887298230~ 已满，
-- QQ2群：~755960114~ 已满，
-- QQ3群：450338158
-- QQ4群：419196348
+* QQ①群：887298230
 
 ### Project下载
 
@@ -32,23 +29,23 @@
 
 ### 更新说明
 
-#### 2022-10-15 update v1.1.1
+#### 2022-10-15 update
 
 * opencv 4.6.0
 * onnxruntime 1.12.1
 * windows支持mt版引用库
 * rec模型输入图片高度改为48
 
-#### 2022-10-16 update v1.1.2
+#### 2022-10-16 update
 
 * 修复：字典添加空格
 
-#### 2022-10-17 update v1.1.3
+#### 2022-10-17 update
 
 * 修复：scoreToTextLine方法索引越界问题
 * Windows控制台编码修改为UTF8
 
-#### 2022-10-20 update v1.2.0
+#### 2022-10-20 update
 
 * 再次修复空格问题
 * 增加GPU(cuda)支持，需要自行下载整合依赖库
@@ -56,19 +53,14 @@
 * 修改默认输入参数
 * 修改benchmark输出样式
 
-#### 2022-10-28 update v1.2.1
+#### 2022-10-28 update
 
 * 适配onnxruntime 1.13.1
 * 修了些warning
 
-#### 2023-02-13 update v1.2.2
+#### 2023-02-13
 
 * 适配onnxruntime 1.14.0
-
-#### 2024-01-07 update v1.2.3
-
-* onnxruntime 1.15.1
-* opencv 4.8.1
 
 ### 模型下载
 
@@ -94,14 +86,6 @@ RapidOcrOnnx/models
 4. 终端运行run-benchmark.sh或命令行运行run-benchmark.bat，查看识别过程平均耗时.
 
 ### FAQ
-
-#### windows10下bat执行错误
-
-- 在win、linux、mac系统下，文本文件使用不同的换行符格式，win是CRLF，linux是LF，mac是CR
-- github的"Download ZIP"按钮下载的整个仓库代码，默认格式是UNIX换行符，此时bat脚本在windows平台执行会出错
-- 解决方法1：从Release中下载完整工程压缩包
-- 解决方法2：使用git clone命令同步仓库代码，git可以自动转换文件格式
-- 解决方法3：使用UltraEdit等文本编辑器，把bat文件的换行符转成win格式
 
 #### windows静态链接msvc
 

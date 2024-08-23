@@ -8,8 +8,8 @@ void AngleNet::setGpuIndex(int gpuIndex) {
         OrtCUDAProviderOptions cuda_options;
         cuda_options.device_id = gpuIndex;
         cuda_options.arena_extend_strategy = 0;
-        cuda_options.gpu_mem_limit = 2ULL * 1024 * 1024 * 1024;
-        cuda_options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearchDefault;
+        cuda_options.gpu_mem_limit = 2 * 1024 * 1024 * 1024;
+        cuda_options.cudnn_conv_algo_search = OrtCudnnConvAlgoSearch::OrtCudnnConvAlgoSearchExhaustive;
         cuda_options.do_copy_in_default_stream = 1;
 
         sessionOptions.AppendExecutionProvider_CUDA(cuda_options);
@@ -39,14 +39,13 @@ void AngleNet::setNumThread(int numOfThread) {
     // If sequential execution is enabled this value is ignored
     // A value of 0 means ORT will pick a default
     sessionOptions.SetInterOpNumThreads(numThread);
-    sessionOptions.SetIntraOpNumThreads(numThread);
 
     // Sets graph optimization level
     // ORT_DISABLE_ALL -> To disable all optimizations
     // ORT_ENABLE_BASIC -> To enable basic optimizations (Such as redundant node removals)
     // ORT_ENABLE_EXTENDED -> To enable extended optimizations (Includes level 1 + more complex optimizations like node fusions)
     // ORT_ENABLE_ALL -> To Enable All possible opitmizations
-    sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
+    sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 }
 
 void AngleNet::initModel(const std::string &pathStr) {

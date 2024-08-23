@@ -32,7 +32,8 @@ set OMP_NUM_THREADS=$NUM_THREADS
 
 PrepareVar
 
-TARGET_IMG=images/1.jpg
+#TARGET_IMG=images/1.jpg
+TARGET_IMG=/home/pk/samba_share/pdf/xfhg_15.png
 if [ ! -f "$TARGET_IMG" ]; then
 echo "找不到待识别的目标图片：${TARGET_IMG}，请打开本文件并编辑TARGET_IMG"
 exit

@@ -28,9 +28,7 @@ int main(int argc, char **argv) {
         printHelp(stderr, argv[0]);
         return -1;
     }
-#ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-#endif
+
     std::string modelsDir, modelDetPath, modelClsPath, modelRecPath, keysPath;
     std::string imgPath, imgDir, imgName;
     int numThread = 4;
@@ -52,29 +50,28 @@ int main(int argc, char **argv) {
         switch (opt) {
             case 'd':
                 modelsDir = optarg;
-                printf("modelsPath=%s\n", modelsDir.c_str());
+                //printf("modelsPath=%s\n", modelsDir.c_str());
                 break;
             case '1':
                 modelDetPath = modelsDir + "/" + optarg;
-                printf("model det path=%s\n", modelDetPath.c_str());
+                //printf("model det path=%s\n", modelDetPath.c_str());
                 break;
             case '2':
                 modelClsPath = modelsDir + "/" + optarg;
-                printf("model cls path=%s\n", modelClsPath.c_str());
+                //printf("model cls path=%s\n", modelClsPath.c_str());
                 break;
             case '3':
                 modelRecPath = modelsDir + "/" + optarg;
-                printf("model rec path=%s\n", modelRecPath.c_str());
+                //printf("model rec path=%s\n", modelRecPath.c_str());
                 break;
             case '4':
                 keysPath = modelsDir + "/" + optarg;
-                printf("keys path=%s\n", keysPath.c_str());
+                //printf("keys path=%s\n", keysPath.c_str());
                 break;
             case 'i':
                 imgPath.assign(optarg);
                 imgDir.assign(imgPath.substr(0, imgPath.find_last_of('/') + 1));
                 imgName.assign(imgPath.substr(imgPath.find_last_of('/') + 1));
-                printf("imgDir=%s, imgName=%s\n", imgDir.c_str(), imgName.c_str());
                 break;
             case 't':
                 numThread = (int) strtol(optarg, NULL, 10);
@@ -119,7 +116,7 @@ int main(int argc, char **argv) {
                 //printf("mostAngle=%d\n", mostAngle);
                 break;
             case 'v':
-                printf("%s\n", VERSION);
+                //printf("%s\n", VERSION);
                 return 0;
             case 'h':
                 printHelp(stdout, argv[0]);
@@ -159,11 +156,11 @@ int main(int argc, char **argv) {
     OcrLite ocrLite;
     ocrLite.setNumThread(numThread);
     ocrLite.initLogger(
-            true,//isOutputConsole
+            false,//isOutputConsole
             false,//isOutputPartImg
-            true);//isOutputResultImg
+            false);//isOutputResultImg
 
-    ocrLite.enableResultTxt(imgDir.c_str(), imgName.c_str());
+    //ocrLite.enableResultTxt(imgDir.c_str(), imgName.c_str());
     ocrLite.setGpuIndex(flagGpu);
     ocrLite.Logger("=====Input Params=====\n");
     ocrLite.Logger(
@@ -175,6 +172,22 @@ int main(int argc, char **argv) {
 
     OcrResult result = ocrLite.detect(imgDir.c_str(), imgName.c_str(), padding, maxSideLen,
                                       boxScoreThresh, boxThresh, unClipRatio, doAngle, mostAngle);
+
+    
+    char txt_output_file[1024];
+    sprintf(txt_output_file, "%s.txt", imgPath.c_str());
+    FILE* fp = fopen(txt_output_file, "w");
+    if (fp!=NULL) {
+      for(const TextBlock& block : result.textBlocks) {
+        fprintf(fp, "%d,%d,%d,%d,%d,%d,%d,%d,%.3f %s\n",
+                block.boxPoint[0].x, block.boxPoint[0].y,
+                block.boxPoint[1].x, block.boxPoint[1].y,
+                block.boxPoint[2].x, block.boxPoint[2].y,
+                block.boxPoint[3].x, block.boxPoint[3].y,
+                block.boxScore, block.text.c_str());
+      }
+      fclose(fp);
+    }
     ocrLite.Logger("%s\n", result.strRes.c_str());
     return 0;
 }
