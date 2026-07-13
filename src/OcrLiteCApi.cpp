@@ -1,12 +1,12 @@
 #ifdef __CLIB__
 
 #include "OcrLiteCApi.h"
-#include "OcrLite.h"
+#include "OcrLiteImpl.h"
 
 extern "C"
 {
 typedef struct {
-    OcrLite OcrObj;
+    OcrLiteImpl OcrObj;
     std::string strRes;
 } OCR_OBJ;
 
@@ -66,6 +66,20 @@ OcrDetect(OCR_HANDLE handle, const char *imgPath, const char *imgName, OCR_PARAM
 }
 
 
+_QM_OCR_API OCR_BOOL
+OcrFreeResult(OCR_RESULT *result) {
+    if(result && result->textBlocksLength && result->textBlocks){
+        for(int i = 0; i < result->textBlocksLength; i++){
+            free(result->textBlocks[i].charScores);
+            free(result->textBlocks[i].text);
+            free(result->textBlocks[i].boxPoint);
+        }
+        free(result->textBlocks);
+        return true;
+    }
+    return false;
+}
+
 _QM_OCR_API int OcrGetLen(OCR_HANDLE handle) {
     OCR_OBJ *pOcrObj = (OCR_OBJ *) handle;
     if (!pOcrObj)
@@ -94,4 +108,3 @@ _QM_OCR_API void OcrDestroy(OCR_HANDLE handle) {
 
 };
 #endif
-
